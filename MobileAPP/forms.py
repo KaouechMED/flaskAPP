@@ -16,9 +16,16 @@ class RegisterForm(FlaskForm):
         email_address=User.query.filter_by(email=email_address_to_check.data).first()
         if email_address:
             raise ValidationError('email address already exist ! try another')
-            
+        
+    def validate_cin(self,cin_to_check):
+        cin=User.query.filter_by(cin=cin_to_check.data).first()
+        if cin:
+            raise ValidationError('cin already exist !')
+        
+    
     username=SearchField(label='Username:',validators=[Length(min=4,max=30),DataRequired()])
     email_address=SearchField(label='email:',validators=[Email(),DataRequired()])
+    cin=SearchField(label='cin:',validators=[Length(min=8),DataRequired()])
     password=PasswordField(label='Password:',validators=[Length(min=6),DataRequired()])
     password_confirm=PasswordField(label='Confirm Password:',validators=[EqualTo('password'),DataRequired()])
     submit=SubmitField(label='Create Account')
