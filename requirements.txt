@@ -5,3 +5,4 @@ pymysql
 flask-bcrypt
 flask-login
 flask-cors
+flask_wtf
