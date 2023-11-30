@@ -1,9 +1,9 @@
 from MobileAPP import app
-from flask import jsonify,request,redirect,url_for
+from flask import jsonify,request,redirect,url_for,flash
 from MobileAPP.models import User
 from MobileAPP.forms import RegisterForm, LoginForm
 from MobileAPP import db
-from flask_login import login_user
+from flask_login import login_user,logout_user,login_required
 
 
 # Example route returning a simple message
@@ -37,6 +37,7 @@ def register_page():
     if form.errors !={}:
         errors = [error for error in form.errors.items()]
         return jsonify({'errors': errors}), 400  # Return validation errors with status code 400
+    
 # Login API endpoint
 @app.route('/api/login', methods=['POST'])
 def login_page():
@@ -52,6 +53,7 @@ def login_page():
     if form.errors !={}:
         errors = [error for error in form.errors.items()]
         return jsonify({'errors': errors}), 400  # Return validation errors with status code 400
+    
 
 #user profile API endpoint
 @app.route('/profile/<username>')
@@ -61,4 +63,12 @@ def user_profile(username):
         return jsonify({'message': f'Welcome to {user.username}\'s profile page!'})
     else:
         return jsonify({'error': 'User not found'}), 404  # Not Found
+    
+
+@app.route('/api/logout',methods=['POST'])
+@login_required
+def logout():
+    logout_user()
+    # flash('You have been logged out.')
+    return jsonify({'message': 'User logged out successfully'}), 200  # OK
 
