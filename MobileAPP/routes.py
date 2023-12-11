@@ -47,7 +47,7 @@ def login_page():
         attempted_user = User.query.filter_by(username=form.username.data).first()
         if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
             login_user(attempted_user)
-            return redirect(url_for('user_profile', username=attempted_user.username))
+            return jsonify({'message': 'success'}),201
         else:
             return jsonify({'error': 'Invalid username or password'}), 401  # Unauthorized
     if form.errors !={}:
